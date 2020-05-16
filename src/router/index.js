@@ -1,22 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import routers from './router'
+import Utils from '../lib/utils'
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: resolve => {
-        require(['../views/login/login.vue'], resolve)
-      }
-    }
-  ]
+const RouterConfig = {
+  routes: routers
+}
+
+export const router = new Router(RouterConfig)
+
+router.beforeEach((to, from, next) => {
+  Utils.title(to.meta.title)
+  next()
 })
