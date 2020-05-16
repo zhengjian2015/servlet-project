@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'mock') {
 }
 
 export function fetch (url, params = {}) {
-  var process
+  console.log(process.env.NODE_ENV)
   if (process.env.NODE_ENV === 'mock') {
     return new Promise((resolve, reject) => {
       Axios.post(url, params)

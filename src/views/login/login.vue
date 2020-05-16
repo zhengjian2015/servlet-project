@@ -5,7 +5,7 @@
 </template>
 <script>
 
-import {login} from '@api/sys/login/login.api'
+import {login} from '@/api/sys/login/login.api'
 
 export default {
   name: 'login',
