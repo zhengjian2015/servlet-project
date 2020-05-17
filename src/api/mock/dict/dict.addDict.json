@@ -1,0 +1,11 @@
+{
+  "code": 200,
+  "msg": "增加字典数据成功！",
+  "obj": {
+    "id": "1111",
+    "dictType": "1",
+    "dictCode": "2",
+    "dictText": "3",
+    "dictValue": "4"
+  }
+}
