@@ -40,6 +40,12 @@
             </a-icon>
             首页
           </a-breadcrumb-item>
+          <template v-for="item in breadCrumbList">
+            <a-breadcrumb-item :key="item.name">
+              <a-icon :type="item.icon" />
+              <span>{{(item.meta && item.meta.title) || item.name}}</span>
+            </a-breadcrumb-item>
+          </template>
         </a-breadcrumb>
         <a-layout-content
           :style="{ background: '#fff',  minHeight: '280px' }"
@@ -51,6 +57,8 @@
   </a-layout>
 </template>
 <script>
+import {mapMutations} from 'vuex'
+
 export default {
   data () {
     return {
@@ -59,6 +67,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setBreadCrumbList'
+    ]),
     handleClick (e) {
       this.$router.push({
         name: e.key
@@ -67,10 +78,18 @@ export default {
       })
     }
   },
+  watch: {
+    '$route' (newRoute) {
+      this.setBreadCrumbList(newRoute.matched)
+    }
+  },
   computed: {
     menuList () {
       console.log('this.$store.getters.menuList=>' + this.$store.getters.menuList)
       return this.$store.getters.menuList
+    },
+    breadCrumbList () {
+      return this.$store.getters.breadCrumbList
     }
   }
 }
