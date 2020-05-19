@@ -41,6 +41,20 @@ export default [
         component: resolve => {
           require(['../views/sys/dict/dictList.vue'], resolve)
         }
+      },
+      {
+        path: 'treeList',
+        name: 'treeList',
+        meta: {
+          icon: 'thunderbolt',
+          title: '菜单管理',
+          hideInMenu: false,
+          code: 'system-manage-tree',
+          required: true // true表示需要鉴权
+        },
+        component: resolve => {
+          require(['../views/sys/tree/treeList.vue'], resolve)
+        }
       }
     ]
   }
