@@ -3,6 +3,11 @@
     <a-row :gutter="24">
       <a-col :span="5">
         <a-card :bordered="true" style="min-height: calc(100vh - 274px);">
+          <a-button-group>
+            <a-button type="primary" size="small" @click="handleAdd">
+              新增
+            </a-button>
+          </a-button-group>
           <a-tree
             v-if="treeData.length"
             defaultExpandAll
@@ -17,21 +22,107 @@
         </a-card>
       </a-col>
     </a-row>
+    <addTree v-model="addTreeShow" :parentTreeId="treeId" :parentTreeName="parentTreeName"
+             v-on:operateTreeAdd="operateTreeAdd"
+    ></addTree>
   </a-card>
 </template>
 <script>
 import {getTreeList} from '../../../api/sys/tree/tree.api'
+import addTree from './addTree'
 
 export default {
   name: 'treeList',
+  components: {
+    addTree
+  },
   data () {
     return {
-      treeData: []
+      treeData: [],
+      parentTreeName: '顶层节点',
+      parentTreeId: 0,
+      treeId: 0,
+      hasChildren: false,
+      addTreeShow: false,
+      updateTreeShow: false
     }
   },
   methods: {
+    handleAdd () {
+      this.addTreeShow = true
+    },
+    operateTreeUpdate (obj, c) {
+      for (let i = 0; i < this.treeData.length; i++) {
+        c = this.treeData[i]
+        if (c.treeId === obj.treeId) {
+          c.title = obj.treeName
+          c.treeCode = obj.treeCode
+          return c
+        } else {
+          this.recursionUpdateTree(obj, c)
+        }
+      }
+    },
+    recursionUpdateTree (obj, c) {
+      for (let i = 0; i < c.children.length; i++) {
+        let k = c.children[i]
+        if (k.treeId === obj.treeId) {
+          k.title = obj.treeName
+          k.treeCode = obj.treeCode
+          return k
+        } else {
+          this.recursionUpdateTree(obj, k)
+        }
+      }
+    },
+    operateTreeAdd (obj, c) {
+      // 表示当前新增的菜单节点是属于顶层的菜单节点因此需要做特殊处理
+      if (obj.parentTreeId === 0) {
+        let o = {}
+        o.title = obj.treeName
+        o.treeCode = obj.treeCode
+        o.treeId = obj.treeId
+        o.parentTreeId = obj.parentTreeId
+        o.parentTreeName = obj.parentTreeName
+        o.children = []
+        o.expand = true
+        this.treeData.push(o)
+        return
+      }
+      for (let i = 0; i < this.treeData.length; i++) {
+        c = this.treeData[i]
+        if (c.treeId === obj.parentTreeId) {
+          let o = {}
+          o.title = obj.treeName
+          o.treeCode = obj.treeCode
+          o.treeId = obj.treeId
+          o.parentTreeId = obj.parentTreeId
+          o.parentTreeName = obj.parentTreeName
+          o.children = []
+          o.expand = true
+          c.children.push(o)
+          return
+        } else {
+          this.recursionAddTree(obj, c)
+        }
+      }
+    },
     onSelectChange (selectedKeys, info) {
-      console.log(selectedKeys + '---' + info)
+      if (selectedKeys.length === 0) {
+        this.treeId = 0
+        this.parentTreeId = 0
+        this.parentTreeName = '顶层节点'
+        this.hasChildren = false
+      } else {
+        this.treeId = info.selectedNodes[0].data.props.treeId
+        this.parentTreeId = info.selectedNodes[0].data.props.parentTreeId
+        this.parentTreeName = info.selectedNodes[0].data.props.title
+        if (info.selectedNodes[0].data.props.dataRef.children.length === 0) {
+          this.hasChildren = false
+        } else {
+          this.hasChildren = true
+        }
+      }
     },
     initTree () {
       getTreeList({}).then(res => {

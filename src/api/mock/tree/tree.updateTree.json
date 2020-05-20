@@ -1,0 +1,16 @@
+{
+  "code": 200,
+  "msg": "更新菜单节点成功",
+  "obj": {
+    "treeId": 84,
+    "treeName": "abc",
+    "treeCode": "测试文件标题0211",
+    "treeState": "1",
+    "treeType": "1",
+    "parentTreeId": 100,
+    "parentTreeName": "文件上传",
+    "crtDate": "2019-11-04T14:48:54.000+0000",
+    "fullPath": ".77.82",
+    "powerPath": "111111"
+  }
+}

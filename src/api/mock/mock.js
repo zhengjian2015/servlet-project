@@ -9,6 +9,11 @@ import queryDictList from './dict/dict.queryDictList'
 
 import getTreeList from './tree/tree.getTreeList'
 
+import treeAddTree from './tree/tree.addTree'
+import treeCheckTreeCode from './tree/tree.checkTreeCode'
+import treeGetTreeByTreeId from './tree/tree.getTreeByTreeId'
+import treeUpdateTree from './tree/tree.updateTree'
+
 const Mock = require('mockjs')
 
 /**
@@ -26,3 +31,7 @@ Mock.mock('/dict/deleteDict', 'post', deleteDict)
 Mock.mock('/dict/queryDictList', 'post', queryDictList)
 
 Mock.mock('/tree/getTreeList', 'post', getTreeList)
+Mock.mock('/tree/addTree', 'post', treeAddTree)
+Mock.mock('/tree/checkTreeCode', 'post', treeCheckTreeCode)
+Mock.mock('/tree/getTreeByTreeId', 'post', treeGetTreeByTreeId)
+Mock.mock('/tree/updateTree', 'post', treeUpdateTree)
