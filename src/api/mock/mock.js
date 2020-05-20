@@ -7,6 +7,8 @@ import updateDict from './dict/dict.updateDict'
 import deleteDict from './dict/dict.deleteDict'
 import queryDictList from './dict/dict.queryDictList'
 
+import getTreeList from './tree/tree.getTreeList'
+
 const Mock = require('mockjs')
 
 /**
@@ -22,3 +24,5 @@ Mock.mock('/dict/checkTypeAndCode', 'post', checkTypeAndCode)
 Mock.mock('/dict/updateDict', 'post', updateDict)
 Mock.mock('/dict/deleteDict', 'post', deleteDict)
 Mock.mock('/dict/queryDictList', 'post', queryDictList)
+
+Mock.mock('/tree/getTreeList', 'post', getTreeList)
