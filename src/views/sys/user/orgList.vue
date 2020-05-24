@@ -37,14 +37,20 @@
         </a-card>
       </a-col>
     </a-row>
+    <updateOrg v-model="updateOrgShow" :orgId="orgId" v-on:operateOrgUpdate="operateOrgUpdate"></updateOrg>
+    <addOrg v-model="addOrgShow" :parentOrgId="parentOrgId" :parentOrgName="parentOrgName" v-on:operateOrgAdd="operateOrgAdd"></addOrg>
   </a-card>
 </template>
 <script>
 import {getOrgTree} from '../../../api/sys/org/org.api'
+import addOrg from './addOrg'
+import updateOrg from './updateOrg'
 
 export default {
   name: 'orgList',
   components: {
+    addOrg,
+    updateOrg
   },
   data () {
     return {
@@ -63,12 +69,82 @@ export default {
     }
   },
   methods: {
+    getSelectData (data, c) {
+      if (c.length > 1) {
+        let len = c[0]
+        c.splice(0, 1)
+        return this.getSelectData(data[len].children, c)
+      } else {
+        return data[c[0]]
+      }
+    },
+    handleAdd () {
+      this.addOrgShow = true
+    },
     handleUpdate () {
       if (this.parentOrgId === 0) {
         this.$message.warning('请选择需要修改的组织！')
         return false
       }
       this.updateOrgShow = true
+    },
+    operateOrgUpdate (obj, c) {
+      if (c === undefined) {
+        c = this.orgData[0]
+      }
+      if (c.orgId === this.orgId) {
+        c.title = obj.orgName
+        c.orgCode = obj.orgCode
+      }
+      let childrenLength = c.children.length
+      for (let i = 0; i < childrenLength; i++) {
+        c.children[i] = this.operateOrgUpdate(obj, c.children[i])
+      }
+      return c
+    },
+    operateOrgAdd (obj, c) {
+      if (c === undefined) {
+        c = this.orgData[0]
+        if (c.orgId === obj.parentOrgId) {
+          let o = {}
+          o.title = obj.orgName
+          o.orgCode = obj.orgCode
+          o.orgId = obj.orgId
+          o.parentOrgId = obj.parentOrgId
+          o.parentOrgName = obj.parentOrgName
+          o.fullPath = obj.fullPath
+          o.children = []
+          o.scopedSlots = {
+            'title': 'title'
+          }
+          o.expand = true
+          c.children.push(o)
+          return c
+        }
+      }
+      let childrenLength = c.children.length
+      for (let i = 0; i < childrenLength; i++) {
+        if (c.children[i].children.length > 0) {
+          c.children[i] = this.operateOrgAdd(obj, c.children[i])
+        }
+        if (c.children[i].orgId === obj.parentOrgId) {
+          let o = {}
+          o.title = obj.orgName
+          o.orgCode = obj.orgCode
+          o.orgId = obj.orgId
+          o.parentOrgId = obj.parentOrgId
+          o.parentOrgName = obj.parentOrgName
+          o.fullPath = obj.fullPath
+          o.children = []
+          o.scopedSlots = {
+            'title': 'title'
+          }
+          o.expand = true
+          c.children[i].children.push(o)
+          return c
+        }
+      }
+      return c
     },
     onSelectChange (selectedKeys) {
       if (selectedKeys.length === 0) {
@@ -92,6 +168,17 @@ export default {
           this.hasChildren = true
         }
       }
+    },
+    onSearchChange (e) {
+      const value = e.target.value
+      this.nowExpandKeys = []
+      this.combineExpandedKeys(this.orgData, '0-', value)
+      console.log('expandedKeys=>', this.nowExpandKeys)
+      Object.assign(this, {
+        expandedKeys: this.nowExpandKeys,
+        searchValue: value,
+        autoExpandParent: true
+      })
     },
     combineExpandedKeys (orgData, startNode, value) {
       for (let i = 0; i < orgData.length; i++) {

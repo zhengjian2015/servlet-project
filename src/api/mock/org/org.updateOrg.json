@@ -1,0 +1,13 @@
+{
+  "code": 200,
+  "msg": "更新组织架构数据成功",
+  "obj": {
+    "orgId": 4,
+    "orgName": "研发二部11",
+    "orgCode": "xx-2111",
+    "parentOrgId": 1,
+    "parentOrgName": "虚拟顶级组织",
+    "crtDate": "2019-05-10T06:42:50.000+0000",
+    "fullPath": "1.4"
+  }
+}

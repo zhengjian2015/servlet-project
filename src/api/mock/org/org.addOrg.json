@@ -1,0 +1,13 @@
+{
+  "code": 200,
+  "msg": "增加组织架构成功",
+  "obj": {
+    "orgId": 41,
+    "orgName": "研发二部2222",
+    "orgCode": "2222",
+    "parentOrgId": 4,
+    "parentOrgName": "研发二部",
+    "crtDate": "2019-12-06T02:11:41.800+0000",
+    "fullPath": "1.4.41"
+  }
+}

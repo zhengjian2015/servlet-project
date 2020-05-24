@@ -27,6 +27,9 @@ import updateRole from './role/role.updateRole'
 import getRoleByRoleId from './role/role.getRoleByRoleId'
 
 import getOrgTree from './org/org.getOrgTree'
+import addOrg from './org/org.addOrg'
+import updateOrg from './org/org.updateOrg'
+import getOrgByOrgId from './org/org.getOrgByOrgId'
 
 const Mock = require('mockjs')
 
@@ -64,3 +67,6 @@ Mock.mock('/role/updateRole', 'post', updateRole)
 Mock.mock('/role/getRoleByRoleId', 'post', getRoleByRoleId)
 
 Mock.mock('/org/getOrgTree', 'post', getOrgTree)
+Mock.mock('/org/addOrg', 'post', addOrg)
+Mock.mock('/org/updateOrg', 'post', updateOrg)
+Mock.mock('/org/getOrgByOrgId', 'post', getOrgByOrgId)
