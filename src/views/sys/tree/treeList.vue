@@ -23,8 +23,34 @@
         </a-card>
       </a-col>
       <a-col :span="18">
-        <a-card title="按钮管理" :bordered="true" style="min-height: calc(100vh - 274px);">
-          按钮列表
+        <a-card :title="buttonTitle" :bordered="true" class="treeCard">
+          <div>
+            <div class="addDiv">
+              <a-button type="primary" @click="handleAddTreeButton">+新增</a-button>
+            </div>
+            <div class="searchDiv">
+              <a-input-search placeholder="请输入查询条件" style="width:300px;" @search="onSearch"></a-input-search>
+            </div>
+          </div>
+          <div class="tableDiv">
+            <a-table
+              :columns="columns"
+              :dataSource="buttonData"
+              :pagination="pagination"
+              @change="handleTableChange"
+              borderde
+              :rowKey="record=>record.treeId"
+              :loading="loading"
+            >
+              <template slot="treeState" slot-scope="text,record,index">
+                <span v-if="text=='1'">可用</span>
+                <span v-else>冻结</span>
+              </template>
+              <template slot="operation" slot-scope="text,record,index">
+                <a-button type="primary" size="small" @click="handleEditButton()">修改</a-button>
+              </template>
+            </a-table>
+          </div>
         </a-card>
       </a-col>
     </a-row>
@@ -35,7 +61,7 @@
   </a-card>
 </template>
 <script>
-import {getTreeList, deleteTree} from '../../../api/sys/tree/tree.api'
+import {getTreeList, deleteTree, queryTreeButtonList} from '../../../api/sys/tree/tree.api'
 import addTree from './addTree'
 import updateTree from './updateTree'
 
@@ -53,10 +79,75 @@ export default {
       treeId: 0,
       hasChildren: false,
       addTreeShow: false,
-      updateTreeShow: false
+      updateTreeShow: false,
+      pagination: {
+        total: 0,
+        showSizeChanger: true
+      },
+      queryForm: {
+        search: '',
+        current: 1,
+        pageSize: 10,
+        key: '',
+        order: ''
+      },
+      buttonData: [],
+      loading: false,
+      buttonTitle: '按钮管理',
+      addButtonShow: false,
+      updateButtonShow: false
     }
   },
   methods: {
+    handleAddTreeButton () {
+      if (this.parentTreeId === 0) {
+        this.$message.warning('请先选择左侧的菜单，再来增加按钮')
+        return
+      }
+      this.addButtonShow = true
+    },
+    handleTableChange (pagination, filters, sorter) {
+      const pager = {...this.pagination}
+      pager.current = pagination.current
+      this.pagination = pager
+      this.queryForm.current = pagination.current
+      this.queryForm.pageSize = pagination.pageSize
+      this.queryForm.key = sorter.field ? sorter.field : ''
+      this.queryForm.order = sorter.order ? sorter.order.replace('end', '') : ''
+      this.handleSearch()
+    },
+    onSearch (value) {
+      this.queryForm.search = value
+      this.handleSearch()
+    },
+    handleSearch () {
+      this.loading = true
+      let current = this.queryForm.current
+      let pageSize = this.queryForm.pageSize
+      let search = this.queryForm.search
+      let orderKey = this.queryForm.key
+      let orderByValue = this.queryForm.order
+      let parentTreeId = this.treeId
+      const _this = this
+      queryTreeButtonList({
+        current,
+        pageSize,
+        search,
+        orderKey,
+        parentTreeId,
+        orderByValue
+      }).then(res => {
+        if (res.code === 200) {
+          _this.$message.success(res.msg)
+          _this.pagination.total = res.obj.total
+          _this.buttonData = res.obj.rows
+        } else {
+          _this.$message.error(res.msg)
+        }
+      }).finally(() => {
+        _this.loading = false
+      })
+    },
     handleDelete () {
       if (this.treeId === 0) {
         this.$message.warning('请选择需要删除的节点进行删除！')
@@ -203,6 +294,7 @@ export default {
         this.parentTreeId = 0
         this.parentTreeName = '顶层节点'
         this.hasChildren = false
+        this.buttonTitle = '按钮管理'
       } else {
         this.treeId = info.selectedNodes[0].data.props.treeId
         this.parentTreeId = info.selectedNodes[0].data.props.parentTreeId
@@ -212,7 +304,9 @@ export default {
         } else {
           this.hasChildren = true
         }
+        this.buttonTitle = this.parentTreeName
       }
+      this.handleSearch()
     },
     initTree () {
       getTreeList({}).then(res => {
@@ -224,6 +318,41 @@ export default {
       })
     }
   },
+
+  computed: {
+    columns () {
+      return [
+        {
+          key: 'treeName',
+          title: '按钮名称',
+          dataIndex: 'treeName',
+          sorter: true,
+          width: '25%'
+        },
+        {
+          key: 'treeCode',
+          title: '按钮编码',
+          dataIndex: 'treeCode',
+          sorter: true,
+          width: '25%'
+        },
+        {
+          key: 'treeState',
+          title: '按钮状态',
+          dataIndex: 'treeState',
+          sorter: true,
+          width: '25%',
+          scopedSlots: {customRender: 'treeState'}
+        },
+        {
+          title: '操作',
+          dataIndex: 'operation',
+          scopedSlots: {customRender: 'operation'},
+          width: '25%'
+        }
+      ]
+    }
+  },
   // created:html加载完成之前，执行。执行顺序：父组件-子组件
   // mounted:html加载完成后执行。执行顺序：子组件-父组件
   mounted () {
@@ -231,3 +360,22 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .treeCard {
+    min-height: calc(100vh - 274px);
+  }
+
+  .treeCard .addDiv {
+    display: inline-block;
+    float: left;
+  }
+
+  .treeCard .searchDiv {
+    display: inline-block;
+    float: right;
+  }
+
+  .treeCard .tableDiv {
+    margin-top: 50px;
+  }
+</style>

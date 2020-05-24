@@ -14,6 +14,7 @@ import treeCheckTreeCode from './tree/tree.checkTreeCode'
 import treeGetTreeByTreeId from './tree/tree.getTreeByTreeId'
 import treeUpdateTree from './tree/tree.updateTree'
 import treeDeleteTree from './tree/tree.deleteTree'
+import treeQueryTreeButtonList from './tree/tree.queryTreeButtonList';
 
 const Mock = require('mockjs')
 
@@ -38,3 +39,4 @@ Mock.mock('/tree/getTreeByTreeId', 'post', treeGetTreeByTreeId)
 Mock.mock('/tree/updateTree', 'post', treeUpdateTree)
 
 Mock.mock('/tree/deleteTree', 'post', treeDeleteTree)
+Mock.mock('/tree/queryTreeButtonList', 'post', treeQueryTreeButtonList)

@@ -1,5 +1,14 @@
 import {fetch} from '../../../lib/base'
 
+
+/**
+ * 根据菜单节点来获取菜单底下的按钮数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const queryTreeButtonList = params => {
+  return fetch('/tree/queryTreeButtonList', params);
+}
 /**
  * 根据菜单节点ID来删除菜单数据
  * @param params
