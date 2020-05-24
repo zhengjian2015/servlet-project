@@ -107,6 +107,24 @@ export default {
         }
       }
     },
+    recursionAddTree (obj, c) {
+      for (let i = 0; i < c.children.length; i++) {
+        let k = c.children[i]
+        if (k.treeId === obj.parentTreeId) {
+          let o = {}
+          o.title = obj.treeName
+          o.treeCode = obj.treeCode
+          o.treeId = obj.treeId
+          o.parentTreeId = obj.parentTreeId
+          o.parentTreeName = obj.parentTreeName
+          o.children = []
+          o.expand = true
+          k.children.push(o)
+        } else {
+          this.recursionAddTree(obj, k)
+        }
+      }
+    },
     onSelectChange (selectedKeys, info) {
       if (selectedKeys.length === 0) {
         this.treeId = 0
