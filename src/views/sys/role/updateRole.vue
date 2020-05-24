@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     handleOk () {
-      let treeArray = new Array()
+      let treeArray = []
       for (let i = 0; i < this.confirmCheckedKeys.length; i++) {
         let checkeds = this.confirmCheckedKeys[i].split('-')
         checkeds.splice(0, 1)

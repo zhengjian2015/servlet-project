@@ -69,6 +69,20 @@ export default [
         component: resolve => {
           require(['../views/sys/role/roleList.vue'], resolve)
         }
+      },
+      {
+        path: 'orgList',
+        name: 'orgList',
+        meta: {
+          icon: 'team',
+          title: '组织管理',
+          hideInMenu: false,
+          code: 'system-manage-org',
+          required: true // true表示需要鉴权
+        },
+        component: resolve => {
+          require(['../views/sys/user/orgList.vue'], resolve)
+        }
       }
     ]
   }
