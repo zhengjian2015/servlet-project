@@ -1,5 +1,13 @@
 import {fetch} from '../../../lib/base'
 
+/**
+ * 新增按钮节点
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const addButton = params => {
+  return fetch('/tree/addButton', params);
+}
 
 /**
  * 根据菜单节点来获取菜单底下的按钮数据
@@ -7,7 +15,7 @@ import {fetch} from '../../../lib/base'
  * @returns {*|Promise|Promise<any>}
  */
 export const queryTreeButtonList = params => {
-  return fetch('/tree/queryTreeButtonList', params);
+  return fetch('/tree/queryTreeButtonList', params)
 }
 /**
  * 根据菜单节点ID来删除菜单数据

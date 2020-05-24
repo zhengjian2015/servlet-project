@@ -58,18 +58,22 @@
              v-on:operateTreeAdd="operateTreeAdd"
     ></addTree>
     <updateTree v-model="updateTreeShow" :treeId="treeId" v-on:operateTreeUpdate="operateTreeUpdate"></updateTree>
+    <addButton v-model="addButtonShow" :parentTreeId="treeId" :parentTreeName="parentTreeName"
+               v-on:handleSearch="handleSearch"></addButton>
   </a-card>
 </template>
 <script>
 import {getTreeList, deleteTree, queryTreeButtonList} from '../../../api/sys/tree/tree.api'
 import addTree from './addTree'
 import updateTree from './updateTree'
+import addButton from './addButton'
 
 export default {
   name: 'treeList',
   components: {
     addTree,
-    updateTree
+    updateTree,
+    addButton
   },
   data () {
     return {
