@@ -10,6 +10,9 @@
             <a-button type="primary" size="small" @click="handleUpdate">
               修改
             </a-button>
+            <a-button type="primary" size="small" @click="handleDelete">
+              删除
+            </a-button>
           </a-button-group>
           <a-tree
             v-if="treeData.length"
@@ -32,7 +35,7 @@
   </a-card>
 </template>
 <script>
-import {getTreeList} from '../../../api/sys/tree/tree.api'
+import {getTreeList, deleteTree} from '../../../api/sys/tree/tree.api'
 import addTree from './addTree'
 import updateTree from './updateTree'
 
@@ -54,6 +57,47 @@ export default {
     }
   },
   methods: {
+    handleDelete () {
+      if (this.treeId === 0) {
+        this.$message.warning('请选择需要删除的节点进行删除！')
+        return
+      }
+      if (this.hasChildren) {
+        this.$message.warning('请先删除其子节点，然后再删除当前菜单节点！')
+        return
+      }
+      let _this = this
+      this.$confirm({
+        title: '是否删除当前菜单节点',
+        onOk () {
+          deleteTree({treeId: _this.treeId}).then(res => {
+            if (res.code === 200) {
+              _this.$message.success(res.msg)
+              for (let i = 0; i < _this.treeData.length; i++) {
+                if (_this.parentTreeId === 0) {
+                  if (_this.treeId === _this.treeData[i].treeId) {
+                    _this.treeData.splice(i, 1)
+                    break
+                  }
+                } else {
+                  if (_this.operateTreeDelete(_this.treeData[i])) {
+                    break
+                  }
+                }
+              }
+              _this.treeId = 0
+              _this.parentTreeId = 0
+              _this.parentTreeName = '顶层节点'
+            } else {
+              _this.$message.error(res.msg)
+            }
+          })
+        },
+        onCancel () {
+          console.log('------')
+        }
+      })
+    },
     handleUpdate () {
       if (this.treeId === 0) {
         this.$message.warning('请选择需要修改的节点进行修改！')
@@ -63,6 +107,21 @@ export default {
     },
     handleAdd () {
       this.addTreeShow = true
+    },
+    operateTreeDelete (c) {
+      let _this = this
+      let r = -1
+      for (let j = 0; j < c.children.length; j++) {
+        if (c.children[j].treeId === _this.treeId) {
+          r = j
+        } else {
+          this.operateTreeDelete(c.children[j])
+        }
+      }
+      if (r !== -1) {
+        c.children.splice(r, 1)
+      }
+      return false
     },
     operateTreeUpdate (obj, c) {
       for (let i = 0; i < this.treeData.length; i++) {

@@ -1,6 +1,15 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 根据菜单节点ID来删除菜单数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const deleteTree = params => {
+  return fetch('/tree/deleteTree', params)
+}
+
+/**
  * 根据菜单节点ID来获取菜单数据
  * @param params
  * @returns {*|Promise|Promise<any>}
