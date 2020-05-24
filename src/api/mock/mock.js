@@ -19,6 +19,8 @@ import treeAddButton from './tree/tree.addButton'
 import treeUpdateButton from './tree/tree.updateButton'
 import treeDeleteButton from './tree/tree.deleteButton'
 
+import queryRoleList from './role/role.queryRoleList'
+
 const Mock = require('mockjs')
 
 /**
@@ -46,3 +48,5 @@ Mock.mock('/tree/queryTreeButtonList', 'post', treeQueryTreeButtonList)
 Mock.mock('/tree/addButton', 'post', treeAddButton)
 Mock.mock('/tree/updateButton', 'post', treeUpdateButton)
 Mock.mock('/tree/deleteButton', 'post', treeDeleteButton)
+
+Mock.mock('/role/queryRoleList', 'post', queryRoleList)

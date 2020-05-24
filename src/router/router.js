@@ -55,6 +55,20 @@ export default [
         component: resolve => {
           require(['../views/sys/tree/treeList.vue'], resolve)
         }
+      },
+      {
+        path: 'roleList',
+        name: 'roleList',
+        meta: {
+          icon: 'solution',
+          title: '角色管理',
+          hideInMenu: false,
+          code: 'system-manage-role',
+          required: true // true表示需要鉴权
+        },
+        component: resolve => {
+          require(['../views/sys/role/roleList.vue'], resolve)
+        }
       }
     ]
   }
