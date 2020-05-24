@@ -1,6 +1,23 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 删除按钮节点
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const deleteButton = params => {
+  return fetch('/tree/deleteButton', params)
+}
+
+/**
+ * 更新按钮节点
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const updateButton = params => {
+  return fetch('/tree/updateButton', params)
+}
+/**
  * 新增按钮节点
  * @param params
  * @returns {*|Promise|Promise<any>}

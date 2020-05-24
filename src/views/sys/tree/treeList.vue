@@ -60,20 +60,23 @@
     <updateTree v-model="updateTreeShow" :treeId="treeId" v-on:operateTreeUpdate="operateTreeUpdate"></updateTree>
     <addButton v-model="addButtonShow" :parentTreeId="treeId" :parentTreeName="parentTreeName"
                v-on:handleSearch="handleSearch"></addButton>
+    <updateButton v-model="updateButtonShow" :treeId="treeId" v-on:handleSearch="handleSearch"></updateButton>
   </a-card>
 </template>
 <script>
-import {getTreeList, deleteTree, queryTreeButtonList} from '../../../api/sys/tree/tree.api'
+import {getTreeList, deleteTree, queryTreeButtonList, deleteButton} from '../../../api/sys/tree/tree.api'
 import addTree from './addTree'
 import updateTree from './updateTree'
 import addButton from './addButton'
+import updateButton from './updateButton'
 
 export default {
   name: 'treeList',
   components: {
     addTree,
     updateTree,
-    addButton
+    addButton,
+    updateButton
   },
   data () {
     return {
@@ -103,6 +106,19 @@ export default {
     }
   },
   methods: {
+    handleDeleteButton (record) {
+      deleteButton({treeId: record.treeId}).then(res => {
+        if (res.code === 200) {
+          this.$message.success(res.msg)
+          this.handleSearch()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    handleEditButton () {
+      this.updateButtonShow = true
+    },
     handleAddTreeButton () {
       if (this.parentTreeId === 0) {
         this.$message.warning('请先选择左侧的菜单，再来增加按钮')
