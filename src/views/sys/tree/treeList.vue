@@ -48,6 +48,11 @@
               </template>
               <template slot="operation" slot-scope="text,record,index">
                 <a-button type="primary" size="small" @click="handleEditButton()">修改</a-button>
+                <a-popconfirm title="是否删除当前按钮数据？" @confirm="()=>handleDeleteButton(record)">
+                  <a-button size="small" type="primary">
+                    删除
+                  </a-button>
+                </a-popconfirm>
               </template>
             </a-table>
           </div>

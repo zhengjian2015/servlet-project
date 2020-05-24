@@ -23,7 +23,7 @@ export const updateButton = params => {
  * @returns {*|Promise|Promise<any>}
  */
 export const addButton = params => {
-  return fetch('/tree/addButton', params);
+  return fetch('/tree/addButton', params)
 }
 
 /**
