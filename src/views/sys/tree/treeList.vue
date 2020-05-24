@@ -7,6 +7,9 @@
             <a-button type="primary" size="small" @click="handleAdd">
               新增
             </a-button>
+            <a-button type="primary" size="small" @click="handleUpdate">
+              修改
+            </a-button>
           </a-button-group>
           <a-tree
             v-if="treeData.length"
@@ -25,16 +28,19 @@
     <addTree v-model="addTreeShow" :parentTreeId="treeId" :parentTreeName="parentTreeName"
              v-on:operateTreeAdd="operateTreeAdd"
     ></addTree>
+    <updateTree v-model="updateTreeShow" :treeId="treeId" v-on:operateTreeUpdate="operateTreeUpdate"></updateTree>
   </a-card>
 </template>
 <script>
 import {getTreeList} from '../../../api/sys/tree/tree.api'
 import addTree from './addTree'
+import updateTree from './updateTree'
 
 export default {
   name: 'treeList',
   components: {
-    addTree
+    addTree,
+    updateTree
   },
   data () {
     return {
@@ -48,6 +54,13 @@ export default {
     }
   },
   methods: {
+    handleUpdate () {
+      if (this.treeId === 0) {
+        this.$message.warning('请选择需要修改的节点进行修改！')
+        return
+      }
+      this.updateTreeShow = true
+    },
     handleAdd () {
       this.addTreeShow = true
     },
