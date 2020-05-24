@@ -30,6 +30,7 @@
         </template>
       </a-table>
     </div>
+    <addRole v-model="addShow" v-on:handleSearch="handleSearch"></addRole>
   </a-card>
 </template>
 <script>
