@@ -23,6 +23,8 @@ import queryRoleList from './role/role.queryRoleList'
 import addRole from './role/role.addRole'
 import loadTree from './role/role.loadTree'
 import checkRoleCodeAndName from './role/role.checkRoleCodeAndName'
+import updateRole from './role/role.updateRole'
+import getRoleByRoleId from './role/role.getRoleByRoleId'
 
 const Mock = require('mockjs')
 
@@ -56,3 +58,5 @@ Mock.mock('/role/queryRoleList', 'post', queryRoleList)
 Mock.mock('/role/addRole', 'post', addRole)
 Mock.mock('/role/loadTree', 'post', loadTree)
 Mock.mock('/role/checkRoleCodeAndName', 'post', checkRoleCodeAndName)
+Mock.mock('/role/updateRole', 'post', updateRole)
+Mock.mock('/role/getRoleByRoleId', 'post', getRoleByRoleId)

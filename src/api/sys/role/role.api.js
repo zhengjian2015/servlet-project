@@ -1,6 +1,24 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 根据角色ID来获取角色数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getRoleByRoleId = params => {
+  return fetch('/role/getRoleByRoleId', params)
+}
+
+/**
+ * 实现更新角色
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const updateRole = params => {
+  return fetch('/role/updateRole', params)
+}
+
+/**
  * 实现查询角色列表的数据
  * @param params
  * @returns {*|Promise|Promise<any>}

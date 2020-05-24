@@ -31,20 +31,25 @@
       </a-table>
     </div>
     <addRole v-model="addShow" v-on:handleSearch="handleSearch"></addRole>
+    <updateRole v-model="updateShow" :roleId="roleId" v-on:handleSearch="handleSearch"></updateRole>
   </a-card>
 </template>
 <script>
 import {queryRoleList} from '../../../api/sys/role/role.api'
 import addRole from './addRole'
+import updateRole from './updateRole'
 
 export default {
   name: 'roleList',
   components: {
-    addRole
+    addRole,
+    updateRole
   },
   data () {
     return {
       addShow: false,
+      updateShow: false,
+      roleId: '',
       roleData: [],
       loading: false,
       pagination: {
@@ -104,7 +109,8 @@ export default {
       this.handleSearch()
     },
     handleEdit (record, index) {
-
+      this.updateShow = true
+      this.roleId = record.roleId
     },
     handleDelete (record) {
     },
