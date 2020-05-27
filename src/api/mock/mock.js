@@ -32,6 +32,8 @@ import updateOrg from './org/org.updateOrg'
 import getOrgByOrgId from './org/org.getOrgByOrgId'
 import deleteOrg from './org/org.deleteOrg'
 
+import queryUserList from './user/user.queryUserList'
+
 const Mock = require('mockjs')
 
 /**
@@ -72,3 +74,5 @@ Mock.mock('/org/addOrg', 'post', addOrg)
 Mock.mock('/org/updateOrg', 'post', updateOrg)
 Mock.mock('/org/getOrgByOrgId', 'post', getOrgByOrgId)
 Mock.mock('/org/deleteOrg', 'post', deleteOrg)
+
+Mock.mock('/user/queryUserList', 'post', queryUserList)

@@ -36,7 +36,27 @@
       </a-col>
       <a-col :span="18">
         <a-card :title="userListTitle" :bordered="true" style="min-height: calc(100vh - 274px);">
-          用户表格
+          <div>
+            <div style="display: inline-block;">
+              <a-button type="primary">
+                +创建用户
+              </a-button>
+            </div>
+            <div style="display: inline-block;float: right;">
+              <a-input-search placeholder="请输入用户的账号或者姓名" style="width: 200px" @search="onSearch"/>
+            </div>
+            <div style="margin-top: 20px;">
+              <a-table
+                :columns="columns"
+                :dataSource="userData"
+                :pagination="pagination"
+                bordered
+                :rowKey="record => record.userId"
+                :loading="loading"
+              >
+              </a-table>
+            </div>
+          </div>
         </a-card>
       </a-col>
     </a-row>
@@ -48,6 +68,7 @@
 import {getOrgTree, deleteOrg} from '../../../api/sys/org/org.api'
 import addOrg from './addOrg'
 import updateOrg from './updateOrg'
+import {queryUserList} from '../../../api/sys/user/user.api.js'
 
 export default {
   name: 'orgList',
@@ -68,10 +89,56 @@ export default {
       orgId: 1,
       parentOrgId: 0,
       parentOrgName: '虚拟顶级组织',
-      updateOrgShow: false
+      updateOrgShow: false,
+      userData: [],
+      pagination: {
+        total: 0,
+        showSizeChanger: true
+      },
+      queryForm: {
+        search: '',
+        current: 1,
+        pageSize: 10,
+        key: '',
+        order: '',
+        fullPath: ''
+      },
+      loading: false,
+      userId: ''
     }
   },
   methods: {
+    onSearch (value) {
+      this.queryForm.search = value
+      this.handleSearch()
+    },
+    handleSearch () {
+      this.loading = true
+      let current = this.queryForm.current
+      let pageSize = this.queryForm.pageSize
+      let search = this.queryForm.search
+      let orderKey = this.queryForm.key
+      let orderByValue = this.queryForm.order
+      let fullPath = this.queryForm.fullPath
+      queryUserList({
+        current,
+        pageSize,
+        search,
+        orderKey,
+        orderByValue,
+        fullPath
+      }).then(res => {
+        if (res.code === 200) {
+          this.pagination.total = res.obj.total
+          this.userData = res.obj.rows
+          this.$message.success(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     getSelectData (data, c) {
       if (c.length > 1) {
         let len = c[0]
@@ -230,6 +297,7 @@ export default {
           this.hasChildren = true
         }
       }
+      this.handleSearch()
     },
     onSearchChange (e) {
       const value = e.target.value
@@ -268,6 +336,54 @@ export default {
   },
   mounted () {
     this.initTree()
+  },
+  computed: {
+    columns () {
+      return [
+        {
+          key: 'loginAccount',
+          title: '用户账号',
+          dataIndex: 'loginAccount',
+          sorter: true,
+          width: '20%'
+        },
+        {
+          key: 'nickName',
+          title: '用户姓名',
+          dataIndex: 'nickName',
+          sorter: true,
+          width: '20%'
+        },
+        {
+          key: 'crtDate',
+          title: '创建时间',
+          dataIndex: 'crtDate',
+          sorter: true,
+          width: '20%',
+          customRender: (text, row, index) => {
+            return this.formatDate(new Date(text), 'yyyy/MM/dd hh:mm:ss')
+          }
+        },
+        {
+          key: 'lastLoginDate',
+          title: '最后登录时间',
+          dataIndex: 'lastLoginDate',
+          sorter: true,
+          width: '20%',
+          customRender: (text, row, index) => {
+            if (text != null) {
+              return this.formatDate(new Date(text), 'yyyy/MM/dd hh:mm:ss')
+            }
+          }
+        },
+        {
+          title: '操作',
+          dataIndex: 'operation',
+          scopedSlots: {customRender: 'operation'},
+          width: '20%'
+        }
+      ]
+    }
   }
 }
 </script>
