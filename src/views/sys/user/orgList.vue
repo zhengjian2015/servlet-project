@@ -10,6 +10,9 @@
             <a-button type="primary" size="small" @click="handleUpdate">
               修改
             </a-button>
+            <a-button type="primary" size="small" @click="handleDelete">
+              删除
+            </a-button>
           </a-button-group>
           <a-input-search style="margin-left: 10px;margin-top:5px; width: 144px;" size="small" placeholder="请输入组织" @change="onSearchChange"/>
           <a-tree
@@ -42,7 +45,7 @@
   </a-card>
 </template>
 <script>
-import {getOrgTree} from '../../../api/sys/org/org.api'
+import {getOrgTree, deleteOrg} from '../../../api/sys/org/org.api'
 import addOrg from './addOrg'
 import updateOrg from './updateOrg'
 
@@ -87,6 +90,65 @@ export default {
         return false
       }
       this.updateOrgShow = true
+    },
+    handleDelete () {
+      if (this.parentOrgId === 0) {
+        this.$message.warning('请选择需要删除的组织！')
+        return false
+      }
+      if (this.hasChildren) {
+        this.$message.warning('当前组织底下还有子组织，请先删除自组织再来删除当前组织！')
+        return false
+      }
+      let _this = this
+      this.$confirm({
+        title: '是否删除当前组织？',
+        onOk () {
+          deleteOrg({orgId: _this.orgId}).then(res => {
+            if (res.code === 200) {
+              _this.$message.success(res.msg)
+              _this.operateOrgDelete(_this.orgData[0])
+              _this.parentId = 1
+              _this.orgId = 0
+              _this.parentOrgName = '虚拟顶级组织'
+              _this.hasChildren = false
+            } else {
+              _this.$message.error(res.msg)
+            }
+          })
+        }
+      })
+    },
+    operateOrgDelete (c) {
+      let _this = this
+      let r = -1
+      if (c.orgId === this.parentOrgId) {
+        for (let j = 0; j < c.children.length; j++) {
+          if (c.children[j].orgId === _this.orgId) {
+            r = j
+          }
+        }
+        if (r !== -1) {
+          c.children.splice(r, 1)
+        }
+      }
+      let childrenLength = c.children.length
+      for (let i = 0; i < childrenLength; i++) {
+        if (c.children[i].children.length > 0) {
+          c.children[i] = this.operateOrgDelete(c.children[i])
+        }
+        if (c.children[i].orgId === this.parentOrgId) {
+          for (let j = 0; j < c.children[i].children.length; j++) {
+            if (c.children[i].children[j].orgId === _this.orgId) {
+              r = j
+            }
+          }
+          if (r !== -1) {
+            c.children[i].children.splice(r, 1)
+          }
+        }
+      }
+      return c
     },
     operateOrgUpdate (obj, c) {
       if (c === undefined) {

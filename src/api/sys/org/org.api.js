@@ -1,6 +1,15 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 功能描述： 删除菜单
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const deleteOrg = params => {
+  return fetch('/org/deleteOrg', params)
+}
+
+/**
  * 功能描述： 根据菜单ID来获取菜单数据
  * @param params
  * @returns {*|Promise|Promise<any>}
