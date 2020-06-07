@@ -1,6 +1,24 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 根据流水ID来获取用户数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getUserByUserId = params => {
+  return fetch('/user/getUserByUserId', params)
+}
+
+/**
+ * 更新用户数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const updateUser = params => {
+  return fetch('/user/updateUser', params)
+}
+
+/**
  * 获取用户列表数据
  * @param params
  * @returns {*|Promise|Promise<any>}

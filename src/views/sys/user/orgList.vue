@@ -54,6 +54,17 @@
                 :rowKey="record => record.userId"
                 :loading="loading"
               >
+                <template slot="operation" slot-scope="text, record, index">
+                  <a-button type="primary" size="small" @click="handleEditUser(record)">
+                    修改
+                  </a-button>
+                  <a-popconfirm title="是否删除当前用户数据？" @confirm="()=>handleDeleteUser(record)">
+                    <a-button type="primary" size="small" >
+                      删除
+                    </a-button>
+                  </a-popconfirm>
+
+                </template>
               </a-table>
             </div>
           </div>
@@ -63,6 +74,7 @@
     <updateOrg v-model="updateOrgShow" :orgId="orgId" v-on:operateOrgUpdate="operateOrgUpdate"></updateOrg>
     <addOrg v-model="addOrgShow" :parentOrgId="parentOrgId" :parentOrgName="parentOrgName" v-on:operateOrgAdd="operateOrgAdd"></addOrg>
     <addUser v-model="addUserShow" v-on:handleSearch="handleSearch"></addUser>
+    <updateUser v-model="updateUserShow" :userId="userId" v-on:handleSearch="handleSearch" ></updateUser>
   </a-card>
 </template>
 <script>
@@ -71,13 +83,15 @@ import addOrg from './addOrg'
 import updateOrg from './updateOrg'
 import {queryUserList} from '../../../api/sys/user/user.api.js'
 import addUser from './addUser'
+import updateUser from './updateUser'
 
 export default {
   name: 'orgList',
   components: {
     addOrg,
     updateOrg,
-    addUser
+    addUser,
+    updateUser
   },
   data () {
     return {
@@ -108,6 +122,7 @@ export default {
       },
       loading: false,
       addUserShow: false,
+      updateUserShow: false,
       userId: ''
     }
   },
@@ -189,6 +204,10 @@ export default {
           })
         }
       })
+    },
+    handleEditUser (record) {
+      this.userId = record.userId
+      this.updateUserShow = true
     },
     handleAddUser () {
       this.addUserShow = true
