@@ -1,6 +1,15 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 功能描述： 获取组织的数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const getOrgCascader = params => {
+  return fetch('/org/getOrgCascader', params)
+}
+
+/**
  * 功能描述： 删除菜单
  * @param params
  * @returns {*|Promise|Promise<any>}

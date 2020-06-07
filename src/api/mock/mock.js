@@ -31,8 +31,15 @@ import addOrg from './org/org.addOrg'
 import updateOrg from './org/org.updateOrg'
 import getOrgByOrgId from './org/org.getOrgByOrgId'
 import deleteOrg from './org/org.deleteOrg'
+import getOrgCascader from './org/org.getOrgCascader'
 
 import queryUserList from './user/user.queryUserList'
+import createUser from './user/user.createUser'
+import loadAllRole from './user/user.loadAllRole'
+import checkLoginAccount from './user/user.checkLoginAccount'
+import updateUser from './user/user.updateUser'
+import getUserByUserId from './user/user.getUserByUserId'
+import deleteUser from './user/user.deleteUser'
 
 const Mock = require('mockjs')
 
@@ -69,6 +76,7 @@ Mock.mock('/role/checkRoleCodeAndName', 'post', checkRoleCodeAndName)
 Mock.mock('/role/updateRole', 'post', updateRole)
 Mock.mock('/role/getRoleByRoleId', 'post', getRoleByRoleId)
 
+Mock.mock('/org/getOrgCascader', 'post', getOrgCascader)
 Mock.mock('/org/getOrgTree', 'post', getOrgTree)
 Mock.mock('/org/addOrg', 'post', addOrg)
 Mock.mock('/org/updateOrg', 'post', updateOrg)
@@ -76,3 +84,9 @@ Mock.mock('/org/getOrgByOrgId', 'post', getOrgByOrgId)
 Mock.mock('/org/deleteOrg', 'post', deleteOrg)
 
 Mock.mock('/user/queryUserList', 'post', queryUserList)
+Mock.mock('/user/deleteUser', 'post', deleteUser)
+Mock.mock('/user/getUserByUserId', 'post', getUserByUserId)
+Mock.mock('/user/updateUser', 'post', updateUser)
+Mock.mock('/user/checkLoginAccount', 'post', checkLoginAccount)
+Mock.mock('/user/loadAllRole', 'post', loadAllRole)
+Mock.mock('/user/createUser', 'post', createUser)

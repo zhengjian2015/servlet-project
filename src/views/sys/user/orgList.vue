@@ -38,7 +38,7 @@
         <a-card :title="userListTitle" :bordered="true" style="min-height: calc(100vh - 274px);">
           <div>
             <div style="display: inline-block;">
-              <a-button type="primary">
+              <a-button type="primary" @click="handleAddUser">
                 +创建用户
               </a-button>
             </div>
@@ -62,6 +62,7 @@
     </a-row>
     <updateOrg v-model="updateOrgShow" :orgId="orgId" v-on:operateOrgUpdate="operateOrgUpdate"></updateOrg>
     <addOrg v-model="addOrgShow" :parentOrgId="parentOrgId" :parentOrgName="parentOrgName" v-on:operateOrgAdd="operateOrgAdd"></addOrg>
+    <addUser v-model="addUserShow" v-on:handleSearch="handleSearch"></addUser>
   </a-card>
 </template>
 <script>
@@ -69,12 +70,14 @@ import {getOrgTree, deleteOrg} from '../../../api/sys/org/org.api'
 import addOrg from './addOrg'
 import updateOrg from './updateOrg'
 import {queryUserList} from '../../../api/sys/user/user.api.js'
+import addUser from './addUser'
 
 export default {
   name: 'orgList',
   components: {
     addOrg,
-    updateOrg
+    updateOrg,
+    addUser
   },
   data () {
     return {
@@ -104,6 +107,7 @@ export default {
         fullPath: ''
       },
       loading: false,
+      addUserShow: false,
       userId: ''
     }
   },
@@ -185,6 +189,9 @@ export default {
           })
         }
       })
+    },
+    handleAddUser () {
+      this.addUserShow = true
     },
     operateOrgDelete (c) {
       let _this = this
