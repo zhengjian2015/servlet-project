@@ -81,7 +81,7 @@
 import {getOrgTree, deleteOrg} from '../../../api/sys/org/org.api'
 import addOrg from './addOrg'
 import updateOrg from './updateOrg'
-import {queryUserList} from '../../../api/sys/user/user.api.js'
+import {queryUserList, deleteUser} from '../../../api/sys/user/user.api.js'
 import addUser from './addUser'
 import updateUser from './updateUser'
 
@@ -127,6 +127,16 @@ export default {
     }
   },
   methods: {
+    handleDeleteUser (record) {
+      deleteUser({userId: record.userId}).then(res => {
+        if (res.code === 200) {
+          this.$message.success(res.msg)
+          this.handleSearch()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     onSearch (value) {
       this.queryForm.search = value
       this.handleSearch()

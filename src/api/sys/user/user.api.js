@@ -1,6 +1,15 @@
 import {fetch} from '../../../lib/base'
 
 /**
+ * 根据流水ID来删除用户数据
+ * @param params
+ * @returns {*|Promise|Promise<any>}
+ */
+export const deleteUser = params => {
+  return fetch('/user/deleteUser', params)
+}
+
+/**
  * 根据流水ID来获取用户数据
  * @param params
  * @returns {*|Promise|Promise<any>}
