@@ -368,9 +368,14 @@ export default {
           this.$Message.error('加载组织架构菜单节点失败，请与管理联系')
         }
       })
+    },
+    initLay () {
+      // let channel = this.$route.query.openid
+      // alert(channel)
     }
   },
   mounted () {
+    this.initLay()
     this.initTree()
   },
   computed: {
