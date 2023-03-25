@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 // WebServlet注解表示这是一个Servlet，并映射到地址/:
-@WebServlet(urlPatterns = "/")
+//@WebServlet(urlPatterns = "/")
 public class HelloServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
