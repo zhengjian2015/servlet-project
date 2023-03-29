@@ -1,4 +1,4 @@
-package com.learnjava;
+package com.learnjava.servlet;
 
 import com.learnjava.bean.School;
 import com.learnjava.bean.User;

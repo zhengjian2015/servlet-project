@@ -1,4 +1,4 @@
-package com.learnjava;
+package com.learnjava.servlet;
 /**
  * tomcat放在main方法中的使用
  *
